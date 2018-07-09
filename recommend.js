@@ -21,8 +21,48 @@ function main() {
     }
 }
 
-function getRecommend(err, obj){
-    console.log(obj);
+function getRecommend(err, obj) {
+    var starredURLs = [];
+
+    //grabs the starred_urls from each object and removing the {/owner}{/repo} string from each
+    for (var index in obj) {
+        var str = obj[index].starred_url.split("{/owner}{/repo}").join('');
+        starredURLs.push(str);
+    }
+
+    getStarredURL(starredURLs, starredURLs.length);
+}
+
+function getStarredURL(starredURLs, count) {
+    var starredCounts = {}
+
+    for (let url of starredURLs) {
+        var options = {
+            url: url,
+            headers: {
+                'User-Agent': 'request',
+                'Authorization': process.env.GITHUB_TOKEN
+            }
+        };
+        request(options, parseStarredResponse);
+    }
+}
+
+function parseStarredResponse(err, res, body) {
+    var starredCounts = {};
+    var obj = JSON.parse(body);
+    
+    for (let index in obj){
+        let starred = obj[index].full_name;
+        
+        if (starredCounts[starred] == undefined){
+            starredCounts[starred] = 1;
+        } else {
+            starredCounts[starred] += 1;
+        }
+    }
+
+    console.log(starredCounts);
 }
 
 main();
