@@ -1,0 +1,22 @@
+{
+  "name": "github-avatar-downloader",
+  "version": "1.0.0",
+  "description": "simple node program to get the avatars of contributors of a github repo",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RexChiu/LHL-github-avatar-downloader.git"
+  },
+  "author": "RexChiu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RexChiu/LHL-github-avatar-downloader/issues"
+  },
+  "homepage": "https://github.com/RexChiu/LHL-github-avatar-downloader#readme",
+  "dependencies": {
+    "request": "^2.87.0"
+  }
+}
