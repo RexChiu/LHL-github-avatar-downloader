@@ -2,7 +2,6 @@ require('dotenv').config();
 
 var request = require('request');
 var fs = require('fs');
-var secrets = require('./secrets');
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
@@ -58,6 +57,11 @@ function iterateAvatars(err, obj) {
 
 //main function for error checking and program flow
 function main() {
+    //makes the avatars directory if it does not exist
+    if (!fs.existsSync("./avatars")){
+        fs.mkdirSync("./avatars");
+    }
+
     var args = process.argv.slice(2);
     if (args.length != 2) {
         console.log("incorrect arguments");
