@@ -16,7 +16,11 @@ function getRepoContributors(repoOwner, repoName, cb) {
     };
 
     //sends request to specified URL, converts response into JSON object and calls callback function
+    //error checks for status code 404 if repo/owner does not exist
     request(options, function (err, res, body) {
+        if (res.statusCode == 404){
+            throw "Provided GitHub Owner/Repo does not exist!";
+        }
         var obj = JSON.parse(body);
         cb(err, obj);
     });
@@ -26,6 +30,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 //saves as type .png or .jpg according to the type stored on the server
 function downloadImageByURL(url, filePath) {
     var path = filePath;
+
     request.get(url)
         .on('error', function (err) {
             throw err;
