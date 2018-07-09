@@ -72,6 +72,7 @@ function parseStarredResponse(err, res, body) {
 
     //uses a global counter to see if it is the last response to come back
     counter++;
+    console.log("Processing starred repo #" + counter + " of " + numStarred);
 
     //sorts and displays the highest 5 element
     if (counter == numStarred) {
