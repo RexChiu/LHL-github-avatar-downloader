@@ -4,6 +4,7 @@ var secrets = require('./secrets');
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
+//function to grab the contributors of a given github repo
 function getRepoContributors(repoOwner, repoName, cb) {
     var options = {
         url: 'https://api.github.com/repos/' + repoOwner + "/" + repoName + "/contributors",
@@ -13,12 +14,15 @@ function getRepoContributors(repoOwner, repoName, cb) {
         }
     };
 
+    //sends request to specified URL, converts response into JSON object and calls callback function
     request(options, function (err, res, body) {
         var obj = JSON.parse(body);
         cb(err, obj);
     });
 }
 
+//function to download an image given a url, saves into a filepath
+//saves as type .png or .jpg according to the type stored on the server
 function downloadImageByURL(url, filePath) {
     var path = filePath;
     request.get(url)
@@ -26,7 +30,7 @@ function downloadImageByURL(url, filePath) {
             throw err;
         })
         .on('response', function (response) {
-            //function to catch the .png or .jpg file type, and add path accordingly
+            //catch the .png or .jpg file type, and add path accordingly
             let contentType = response.headers['content-type'];
             if (contentType == "image/png") { filePath += ".png"; }
             else { filePath += ".jpg"; }
@@ -34,6 +38,8 @@ function downloadImageByURL(url, filePath) {
         .pipe(fs.createWriteStream(filePath));
 }
 
+//function to iterate over object returned from github API
+//finds avatar URL and username to pass onto downloadImageByURL
 function iterateAvatars(err, obj) {
     if (err) {
         throw err;
@@ -48,6 +54,7 @@ function iterateAvatars(err, obj) {
     }
 }
 
+//main function for error checking and program flow
 function main() {
     var args = process.argv.slice(2);
     if (args.length != 2) {
