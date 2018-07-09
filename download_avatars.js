@@ -41,28 +41,11 @@ function downloadImageByURL(url, filePath) {
     };
 
     request(options, function (err, res, body) {
-        if (res.statusCode != 200) {
-            throw new Error("Some Error");
-        }
-
         let contentType = res.headers['content-type'];
         if (contentType == "image/png") { filePath += ".png"; }
         else { filePath += ".jpg"; }
 
     }).pipe(fs.createWriteStream(filePath));
-
-    // request.get(url)
-    //     .on('error', function (err) {
-    //         throw err;
-    //     })
-    //     .on('response', function (response) {
-
-    //         //catch the .png or .jpg file type, and add path accordingly
-    //         let contentType = response.headers['content-type'];
-    //         if (contentType == "image/png") { filePath += ".png"; }
-    //         else { filePath += ".jpg"; }
-    //     })
-    //     .pipe(fs.createWriteStream(filePath));
 }
 
 //function to iterate over object returned from github API
@@ -91,6 +74,11 @@ function main() {
     //throws error if .env does not exist
     if (dotenvResult.error) {
         throw dotenv.error;
+    }
+
+    //throw error if .env does not have the token
+    if (!process.env.GITHUB_TOKEN){
+        throw new Error(".env does not have proper token");
     }
 
     var args = process.argv.slice(2);
