@@ -26,6 +26,7 @@ function main() {
     }
 }
 
+//goes through the contributors object and grabs all the starredURLs
 function getRecommend(err, obj) {
     var starredURLs = [];
 
@@ -38,6 +39,7 @@ function getRecommend(err, obj) {
     getStarredURL(starredURLs, starredURLs.length);
 }
 
+//goes through the list of starred URLs and calls each one to get its starred list
 function getStarredURL(starredURLs, count) {
     numStarred = count;
 
@@ -53,9 +55,11 @@ function getStarredURL(starredURLs, count) {
     }
 }
 
+//for every response for a user's starred repos, add onto the global starredCounts object
 function parseStarredResponse(err, res, body) {
     var obj = JSON.parse(body);
 
+    //adds starred repo into counting obj, if none exists init count
     for (let index in obj) {
         let starred = obj[index].full_name;
 
@@ -66,8 +70,10 @@ function parseStarredResponse(err, res, body) {
         }
     }
 
+    //uses a global counter to see if it is the last response to come back
     counter++;
 
+    //sorts and displays the highest 5 element
     if (counter == numStarred) {
         sortObjectValues(starredCounts);
     }
@@ -76,6 +82,7 @@ function parseStarredResponse(err, res, body) {
 main();
 
 //sorting object based on values
+//algorithm idea from https://stackoverflow.com/questions/1069666/sorting-javascript-object-by-property-value
 function sortObjectValues(obj){
     var tempArr = [];
 
