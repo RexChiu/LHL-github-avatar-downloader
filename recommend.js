@@ -69,8 +69,25 @@ function parseStarredResponse(err, res, body) {
     counter++;
 
     if (counter == numStarred) {
-        console.log(starredCounts);
+        sortObjectValues(starredCounts);
     }
 }
 
 main();
+
+//sorting object based on values
+function sortObjectValues(obj){
+    var tempArr = [];
+
+    for (var key in obj){
+        tempArr.push([key, obj[key]]);
+    }
+
+    tempArr.sort(function(a, b){
+        return b[1] - a[1];
+    });
+
+    for (let i = 0; i < 5; i++){
+        console.log("[ " + tempArr[i][1] + " stars ] " + tempArr[i][0]);
+    }
+}
