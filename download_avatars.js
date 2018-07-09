@@ -1,4 +1,4 @@
-require('dotenv').config();
+var dotenv = require('dotenv').config();
 
 var request = require('request');
 var fs = require('fs');
@@ -18,8 +18,8 @@ function getRepoContributors(repoOwner, repoName, cb) {
     //sends request to specified URL, converts response into JSON object and calls callback function
     //error checks for status code 404 if repo/owner does not exist
     request(options, function (err, res, body) {
-        if (res.statusCode == 404){
-            throw "Provided GitHub Owner/Repo does not exist!";
+        if (res.statusCode == 404) {
+            throw new Error("Provided GitHub Owner/Repo does not exist!");
         }
         var obj = JSON.parse(body);
         cb(err, obj);
@@ -63,8 +63,13 @@ function iterateAvatars(err, obj) {
 //main function for error checking and program flow
 function main() {
     //makes the avatars directory if it does not exist
-    if (!fs.existsSync("./avatars")){
+    if (!fs.existsSync("./avatars")) {
         fs.mkdirSync("./avatars");
+    }
+
+    //throws error if .env does not exist
+    if (dotenv.error) {
+        throw dotenv.error;
     }
 
     var args = process.argv.slice(2);
