@@ -60,6 +60,7 @@ function iterateAvatars(err, obj) {
 function main() {
     var args = process.argv.slice(2);
     if (args.length != 2) {
+        console.log("incorrect arguments");
         console.error("Please input a repo owner and repo name");
     } else {
         var repoOwner = args[0];
