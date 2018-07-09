@@ -17,8 +17,12 @@ function main() {
         var repoOwner = args[0];
         var repoName = args[1];
 
-        gitHubAPI(repoOwner, repoName, function(err, obj) { console.log(obj); });
+        gitHubAPI(repoOwner, repoName, getRecommend);
     }
+}
+
+function getRecommend(err, obj){
+    console.log(obj);
 }
 
 main();
