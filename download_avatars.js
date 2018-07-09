@@ -25,10 +25,10 @@ function downloadImageByURL(url, filePath) {
         .on('error', function (err) {
             throw err;
         })
-        .on('response', function (response){
+        .on('response', function (response) {
             //function to catch the .png or .jpg file type, and add path accordingly
             let contentType = response.headers['content-type'];
-            if (contentType == "image/png"){ filePath += ".png"; }
+            if (contentType == "image/png") { filePath += ".png"; }
             else { filePath += ".jpg"; }
         })
         .pipe(fs.createWriteStream(filePath));
@@ -48,4 +48,13 @@ function iterateAvatars(err, obj) {
     }
 }
 
-getRepoContributors("jquery", "jquery", iterateAvatars);
+function main() {
+    var args = process.argv.slice(2);
+
+    var repoOwner = args[0];
+    var repoName = args[1];
+    
+    getRepoContributors(repoOwner, repoName, iterateAvatars);
+}
+
+main();
