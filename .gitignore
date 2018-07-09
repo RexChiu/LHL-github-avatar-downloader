@@ -74,6 +74,7 @@ typings/
 
 # secret stuffs
 secrets.js
+.env
 
 #working files
 avatars
