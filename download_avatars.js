@@ -1,4 +1,5 @@
-var dotenv = require('dotenv').config();
+var dotenvResult = require('dotenv').config();
+var dotenv = require('dotenv');
 
 var request = require('request');
 var fs = require('fs');
@@ -11,7 +12,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
         url: 'https://api.github.com/repos/' + repoOwner + "/" + repoName + "/contributors",
         headers: {
             'User-Agent': 'request',
-            'Authorization': process.env.GITHUB_USERNAME + ":" + process.env.GITHUB_TOKEN
+            'Authorization': process.env.GITHUB_TOKEN
         }
     };
 
@@ -31,17 +32,37 @@ function getRepoContributors(repoOwner, repoName, cb) {
 function downloadImageByURL(url, filePath) {
     var path = filePath;
 
-    request.get(url)
-        .on('error', function (err) {
-            throw err;
-        })
-        .on('response', function (response) {
-            //catch the .png or .jpg file type, and add path accordingly
-            let contentType = response.headers['content-type'];
-            if (contentType == "image/png") { filePath += ".png"; }
-            else { filePath += ".jpg"; }
-        })
-        .pipe(fs.createWriteStream(filePath));
+    var options = {
+        url: url,
+        headers: {
+            'User-Agent': 'request',
+            'Authorization': process.env.GITHUB_TOKEN
+        }
+    };
+
+    request(options, function (err, res, body) {
+        if (res.statusCode != 200) {
+            throw new Error("Some Error");
+        }
+
+        let contentType = res.headers['content-type'];
+        if (contentType == "image/png") { filePath += ".png"; }
+        else { filePath += ".jpg"; }
+
+    }).pipe(fs.createWriteStream(filePath));
+
+    // request.get(url)
+    //     .on('error', function (err) {
+    //         throw err;
+    //     })
+    //     .on('response', function (response) {
+
+    //         //catch the .png or .jpg file type, and add path accordingly
+    //         let contentType = response.headers['content-type'];
+    //         if (contentType == "image/png") { filePath += ".png"; }
+    //         else { filePath += ".jpg"; }
+    //     })
+    //     .pipe(fs.createWriteStream(filePath));
 }
 
 //function to iterate over object returned from github API
@@ -68,7 +89,7 @@ function main() {
     }
 
     //throws error if .env does not exist
-    if (dotenv.error) {
+    if (dotenvResult.error) {
         throw dotenv.error;
     }
 
