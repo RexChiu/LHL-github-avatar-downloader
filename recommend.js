@@ -5,6 +5,11 @@ var request = require('request');
 var fs = require('fs');
 var gitHubAPI = require('./githubAPI.js');
 
+//global variables, will remove when a better solution can be found
+var starredCounts = {};
+var numStarred = 0;
+var counter = 0;
+
 console.log('Welcome to the GitHub Recommend Thingy!');
 
 //main function for error checking and program flow
@@ -34,7 +39,7 @@ function getRecommend(err, obj) {
 }
 
 function getStarredURL(starredURLs, count) {
-    var starredCounts = {}
+    numStarred = count;
 
     for (let url of starredURLs) {
         var options = {
@@ -49,20 +54,23 @@ function getStarredURL(starredURLs, count) {
 }
 
 function parseStarredResponse(err, res, body) {
-    var starredCounts = {};
     var obj = JSON.parse(body);
-    
-    for (let index in obj){
+
+    for (let index in obj) {
         let starred = obj[index].full_name;
-        
-        if (starredCounts[starred] == undefined){
+
+        if (starredCounts[starred] == undefined) {
             starredCounts[starred] = 1;
         } else {
             starredCounts[starred] += 1;
         }
     }
 
-    console.log(starredCounts);
+    counter++;
+
+    if (counter == numStarred) {
+        console.log(starredCounts);
+    }
 }
 
 main();
