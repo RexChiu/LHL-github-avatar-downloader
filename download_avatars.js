@@ -5,7 +5,7 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 function getRepoContributors(repoOwner, repoName, cb){
     var requestURL = 'https://api.github.com/repos/' + repoOwner + "/" + repoName + "/contributors";
     
-    request(URL, function(err, res, body) {
+    request(requestURL, function(err, res, body) {
         cb(err, body);
     });
 }
