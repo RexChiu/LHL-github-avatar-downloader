@@ -17,10 +17,15 @@ function getRepoContributors(repoOwner, repoName, cb) {
     };
 
     //sends request to specified URL, converts response into JSON object and calls callback function
-    //error checks for status code 404 if repo/owner does not exist
+    //error checks for http status codes
     request(options, function (err, res, body) {
+        //repo does not exist
         if (res.statusCode == 404) {
             throw new Error("Provided GitHub Owner/Repo does not exist!");
+        }
+        //bad github token credentials
+        if (res.statusCode == 401) {
+            throw new Error("Provided GitHub token invalid");
         }
         var obj = JSON.parse(body);
         cb(err, obj);
